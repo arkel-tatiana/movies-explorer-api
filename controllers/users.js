@@ -25,7 +25,7 @@ const getUserCurrent = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
       if (user) {
-        res.send({ data: user });
+        res.send(user);
       } else {
         throw new NotFoundError('Пользователь не найден');
       }
@@ -37,15 +37,11 @@ const createUser = (req, res, next) => {
   bcrypt.hash(req.body.password, 10)
     .then((hash) => User.create({
       name: req.body.name,
-      about: req.body.about,
-      avatar: req.body.avatar,
       email: req.body.email,
       password: hash,
     }))
     .then((user) => res.send({
       name: user.name,
-      about: user.about,
-      avatar: user.avatar,
       email: user.email,
       _id: user._id,
     }))
@@ -65,7 +61,7 @@ const updateUser = (req, res, next) => {
   User.findByIdAndUpdate(req.user._id, { name, email }, { new: true, runValidators: true })
     .then((user) => {
       if (user) {
-        res.status(200).send({ data: user });
+        res.status(200).send(user);
       } else {
         throw new NotFoundError('Пользователь не найден');
       }

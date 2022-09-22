@@ -8,7 +8,6 @@ const auth = (req, res, next) => {// eslint-disable-line
   }
   const token = authorization.replace('Bearer ', '');
 
-  //  const token = req.cookies.jwt; // все сделала но тесты не проходит
   let payload;
   try {
     payload = jwt.verify(token, 'dev-secret');//  some-secret-key

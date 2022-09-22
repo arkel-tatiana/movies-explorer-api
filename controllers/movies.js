@@ -5,7 +5,7 @@ const ValidationError = require('../error/ValidationError');
 
 const getMovies = (req, res, next) => {
   Movie.find({})
-    .then((movies) => res.send({ data: movies }))
+    .then((movies) => res.send(movies))
     .catch((err) => next(err));
 };
 
@@ -21,7 +21,7 @@ const deleteMovie = (req, res, next) => {
       }
       return Movie.findByIdAndRemove(req.params.id)
         .then((movieDelete) => {
-          res.status(200).send({ data: movieDelete });
+          res.status(200).send(movieDelete);
         });
     })
     .catch((err) => {
@@ -51,7 +51,7 @@ const createMovie = (req, res, next) => {
     nameEN,
     owner: req.user._id,
   })
-    .then((movie) => res.send({ data: movie }))
+    .then((movie) => res.send(movie))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         return next(new ValidationError(err.message));
