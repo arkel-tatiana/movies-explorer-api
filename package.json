@@ -1,5 +1,5 @@
 {
-  "name": "express-mesto-gha",
+  "name": "movies-explorer-api",
   "version": "1.0.0",
   "main": "app.js",
   "dependencies": {
@@ -28,7 +28,7 @@
     "url": "git+https://github.com/arkel-tatiana/express-mesto-gha.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "ArkelTI",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/arkel-tatiana/express-mesto-gha/issues"
