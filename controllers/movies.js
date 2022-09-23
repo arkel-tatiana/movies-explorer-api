@@ -6,7 +6,7 @@ const ValidationError = require('../error/ValidationError');
 const getMovies = (req, res, next) => {
   Movie.find({})
     .then((movies) => res.send(movies))
-    .catch((err) => next(err));
+    .catch(next);
 };
 
 const deleteMovie = (req, res, next) => {
@@ -21,7 +21,7 @@ const deleteMovie = (req, res, next) => {
       }
       return Movie.findByIdAndRemove(req.params.id)
         .then((movieDelete) => {
-          res.status(200).send(movieDelete);
+          res.send(movieDelete);
         });
     })
     .catch((err) => {

@@ -28,7 +28,7 @@ const { PORT = 3000 } = process.env;
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-mongoose.connect('mongodb://localhost:27017/bitfilmsdb');
+mongoose.connect('mongodb://localhost:27017/moviesdb');
 app.use(requestLogger);
 
 app.post('/signin', celebrate({
@@ -45,8 +45,8 @@ app.post('/signup', celebrate({
   }),
 }), createUser);
 
-app.use('/users', require('./routes/users'));
-app.use('/movies', require('./routes/movie'));
+app.use(require('./routes/users'));
+app.use(require('./routes/movie'));
 
 app.use('*', auth, () => {
   throw new NotFoundError('Запрашиваемый ресурс не найден');

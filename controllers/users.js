@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const User = require('../models/user');
 const ValidationError = require('../error/ValidationError');
 const NotFoundError = require('../error/NotFoundError');
-const UniqueError = require('../error/UniqueError');
+const ConflictError = require('../error/ConflictError');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
@@ -13,7 +13,7 @@ const login = (req, res, next) => {
     .then((user) => {
       const token = jwt.sign(
         { _id: user._id },
-        NODE_ENV !== 'production' ? JWT_SECRET : 'dev-secret',
+        NODE_ENV === 'production' ? JWT_SECRET : 'some-secret-key',
         { expiresIn: '7d' },
       );
       res.send({ token });
@@ -30,7 +30,8 @@ const getUserCurrent = (req, res, next) => {
         throw new NotFoundError('Пользователь не найден');
       }
     })
-    .catch((err) => next(err));
+    .catch(next);
+  // .catch((err) => next(err));
 };
 
 const createUser = (req, res, next) => {
@@ -48,7 +49,7 @@ const createUser = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         if (err.message.includes('unique')) {
-          return next(new UniqueError(err.message.replace('user validation failed:', 'ошибка при создании пользователя:  ')));
+          return next(new ConflictError(err.message.replace('user validation failed:', 'ошибка при создании пользователя:  ')));
         }
         return next(new ValidationError(err.message.replace('user validation failed:', 'ошибка при создании пользователя:  ')));
       }
@@ -61,13 +62,16 @@ const updateUser = (req, res, next) => {
   User.findByIdAndUpdate(req.user._id, { name, email }, { new: true, runValidators: true })
     .then((user) => {
       if (user) {
-        res.status(200).send(user);
+        res.send(user);
       } else {
         throw new NotFoundError('Пользователь не найден');
       }
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
+        if (err.message.includes('unique')) {
+          return next(new ConflictError(err.message.replace('user validation failed:', 'ошибка уникальности при обновлении данных пользователя:  ')));
+        }
         return next(new ValidationError(err.message));
       }
       return next(err);
