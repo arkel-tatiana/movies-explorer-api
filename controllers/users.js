@@ -31,7 +31,6 @@ const getUserCurrent = (req, res, next) => {
       }
     })
     .catch(next);
-  // .catch((err) => next(err));
 };
 
 const createUser = (req, res, next) => {
@@ -70,7 +69,7 @@ const updateUser = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         if (err.message.includes('unique')) {
-          return next(new ConflictError(err.message.replace('user validation failed:', 'ошибка уникальности при обновлении данных пользователя:  ')));
+          return next(new ConflictError(err.message.replace('Validation failed:', 'ошибка уникальности при обновлении данных пользователя:  ')));
         }
         return next(new ValidationError(err.message));
       }

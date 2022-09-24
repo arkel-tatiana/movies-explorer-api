@@ -6,7 +6,6 @@ const { auth } = require('../middlewares/auth');
 const {
   getMovies, deleteMovie, createMovie,
 } = require('../controllers/movies');
-// const regurl = require('../utils/regurl');
 const ValidationError = require('../error/ValidationError');
 
 const castLinkErorr = (value) => {
